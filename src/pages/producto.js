@@ -5,7 +5,7 @@ import "../assets/css/style.css";
 import jsPDF from "jspdf";
 
 const api = axios.create({
-  baseURL: "http://php1ruben.infinityfreeapp.com/app/",
+  baseURL: "https://lisandrohr.com/Ruben/",
 });
 
 async function obtenerProductos() {

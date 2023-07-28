@@ -7,7 +7,7 @@ import jsPDF from "jspdf";
 async function obtenerUsuarios() {
   try {
     const response = await axios.get(
-      "http://php1ruben.infinityfreeapp.com/app/usuario.services.php"
+      "https://lisandrohr.com/Ruben/usuario.services.php"
     );
     if (Array.isArray(response.data)) {
       return response.data;
@@ -21,7 +21,7 @@ async function obtenerUsuarios() {
 async function actualizarUsuario(usuario) {
   try {
     const response = await axios.put(
-      `http://php1ruben.infinityfreeapp.com/app/usuario.services.php?id=${usuario.id}`,
+      `https://lisandrohr.com/Ruben/usuario.services.php?id=${usuario.id}`,
       usuario,
       {
         headers: {
@@ -48,7 +48,7 @@ async function crearUsuario(usuario) {
     } else {
       // Crear el nuevo usuario
       const response = await axios.post(
-        "http://php1ruben.infinityfreeapp.com/app/usuario.services.php",
+        "https://lisandrohr.com/Ruben/usuario.services.php",
         usuario,
         {
           headers: {
@@ -69,7 +69,7 @@ async function crearUsuario(usuario) {
 async function eliminarUsuario(usuario) {
   try {
     const response = await axios.delete(
-      `http://php1ruben.infinityfreeapp.com/app/usuario.services.php?id=${usuario.id}`
+      `https://lisandrohr.com/Ruben/usuario.services.php?id=${usuario.id}`
     );
     if (Array.isArray(response.data)) {
       return response.data;

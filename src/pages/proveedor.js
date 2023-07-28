@@ -7,7 +7,7 @@ import jsPDF from "jspdf";
 async function obtenerProveedores() {
   try {
     const response = await axios.get(
-      "http://php1ruben.infinityfreeapp.com/app/proveedor.services.php"
+      "https://lisandrohr.com/Ruben/proveedor.services.php"
     );
     if (Array.isArray(response.data)) {
       return response.data;
@@ -21,7 +21,7 @@ async function obtenerProveedores() {
 async function actualizarProveedor(proveedor) {
   try {
     const response = await axios.put(
-      `http://php1ruben.infinityfreeapp.com/app/proveedor.services.php?id=${proveedor.id}`,
+      `https://lisandrohr.com/Ruben/proveedor.services.php?id=${proveedor.id}`,
       proveedor,
       {
         headers: {
@@ -48,7 +48,7 @@ async function crearProveedor(proveedor) {
     } else {
       // Crear el nuevo proveedor
       const response = await axios.post(
-        "http://php1ruben.infinityfreeapp.com/app/proveedor.services.php",
+        "https://lisandrohr.com/Ruben/proveedor.services.php",
         proveedor,
         {
           headers: {
@@ -69,7 +69,7 @@ async function crearProveedor(proveedor) {
 async function eliminarProveedor(proveedor) {
   try {
     const response = await axios.delete(
-      `http://php1ruben.infinityfreeapp.com/app/proveedor.services.php?id=${proveedor.id}`
+      `https://lisandrohr.com/Ruben/proveedor.services.php?id=${proveedor.id}`
     );
     if (Array.isArray(response.data)) {
       return response.data;

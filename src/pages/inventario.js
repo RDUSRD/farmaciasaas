@@ -7,7 +7,7 @@ import jsPDF from "jspdf";
 async function obtenerInventario() {
   try {
     const response = await axios.get(
-      "http://php1ruben.infinityfreeapp.com/app/inventario.services.php"
+      "https://lisandrohr.com/Ruben/inventario.services.php"
     );
     if (Array.isArray(response.data)) {
       return response.data;
@@ -21,7 +21,7 @@ async function obtenerInventario() {
 async function actualizarInventario(inventario) {
   try {
     const response = await axios.put(
-      `http://php1ruben.infinityfreeapp.com/app/inventario.services.php?id=${inventario.id}`,
+      `https://lisandrohr.com/Ruben/inventario.services.php?id=${inventario.id}`,
       inventario,
       {
         headers: {
@@ -48,7 +48,7 @@ async function crearInventario(inventario) {
     } else {
       // Crear el nuevo inventario
       const response = await axios.post(
-        "http://php1ruben.infinityfreeapp.com/app/inventario.services.php",
+        "https://lisandrohr.com/Ruben/inventario.services.php",
         inventario,
         {
           headers: {
@@ -69,7 +69,7 @@ async function crearInventario(inventario) {
 async function eliminarInventario(inventario) {
   try {
     const response = await axios.delete(
-      `http://php1ruben.infinityfreeapp.com/app/inventario.services.php?id=${inventario.id}`
+      `https://lisandrohr.com/Ruben/inventario.services.php?id=${inventario.id}`
     );
     if (Array.isArray(response.data)) {
       return response.data;
@@ -83,7 +83,7 @@ async function eliminarInventario(inventario) {
 async function obtenerProductos() {
   try {
     const response = await axios.get(
-      "http://php1ruben.infinityfreeapp.com/app/producto.services.php"
+      "https://lisandrohr.com/Ruben/producto.services.php"
     );
     if (Array.isArray(response.data)) {
       return response.data;
@@ -97,7 +97,7 @@ async function obtenerProductos() {
 async function obtenerProveedores() {
   try {
     const response = await axios.get(
-      "http://php1ruben.infinityfreeapp.com/app/proveedor.services.php"
+      "https://lisandrohr.com/Ruben/proveedor.services.php"
     );
     if (Array.isArray(response.data)) {
       return response.data;
@@ -111,7 +111,7 @@ async function obtenerProveedores() {
 async function obtenerUsuarios() {
   try {
     const response = await axios.get(
-      "http://php1ruben.infinityfreeapp.com/app/usuario.services.php"
+      "https://lisandrohr.com/Ruben/usuario.services.php"
     );
     if (Array.isArray(response.data)) {
       return response.data;
