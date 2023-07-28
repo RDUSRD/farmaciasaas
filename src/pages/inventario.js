@@ -7,7 +7,7 @@ import jsPDF from "jspdf";
 async function obtenerInventario() {
   try {
     const response = await axios.get(
-      "https://lisandrohr.com/Ruben/inventario.services.php"
+      "https://lisandrohr.com/Ruben/Inventario.services.php"
     );
     if (Array.isArray(response.data)) {
       return response.data;
@@ -21,7 +21,7 @@ async function obtenerInventario() {
 async function actualizarInventario(inventario) {
   try {
     const response = await axios.put(
-      `https://lisandrohr.com/Ruben/inventario.services.php?id=${inventario.id}`,
+      `https://lisandrohr.com/Ruben/Inventario.services.php?id=${inventario.id}`,
       inventario,
       {
         headers: {
@@ -48,7 +48,7 @@ async function crearInventario(inventario) {
     } else {
       // Crear el nuevo inventario
       const response = await axios.post(
-        "https://lisandrohr.com/Ruben/inventario.services.php",
+        "https://lisandrohr.com/Ruben/Inventario.services.php",
         inventario,
         {
           headers: {
@@ -69,7 +69,7 @@ async function crearInventario(inventario) {
 async function eliminarInventario(inventario) {
   try {
     const response = await axios.delete(
-      `https://lisandrohr.com/Ruben/inventario.services.php?id=${inventario.id}`
+      `https://lisandrohr.com/Ruben/Inventario.services.php?id=${inventario.id}`
     );
     if (Array.isArray(response.data)) {
       return response.data;
