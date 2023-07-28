@@ -11,7 +11,7 @@ function LoginForm() {
     event.preventDefault();
 
     // Verificar el inicio de sesión del usuario
-    axios.post("http://localhost/ApiFarmacia/app/services/login.php", { email, password })
+    axios.post("http://php1ruben.infinityfreeapp.com/app/login.php", { email, password })
       .then((response) => {
         if (response.data.success) {
           // Iniciar sesión y redirigir al usuario a la página de inicio

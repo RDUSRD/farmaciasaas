@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import "../assets/css/style.css";
+import jsPDF from "jspdf";
 
 async function obtenerInventario() {
   try {
     const response = await axios.get(
-      "http://localhost/ApiFarmacia/app/services/inventario.services.php"
+      "http://php1ruben.infinityfreeapp.com/app/inventario.services.php"
     );
     if (Array.isArray(response.data)) {
       return response.data;
@@ -20,7 +21,7 @@ async function obtenerInventario() {
 async function actualizarInventario(inventario) {
   try {
     const response = await axios.put(
-      `http://localhost/ApiFarmacia/app/services/inventario.services.php?id=${inventario.id}`,
+      `http://php1ruben.infinityfreeapp.com/app/inventario.services.php?id=${inventario.id}`,
       inventario,
       {
         headers: {
@@ -47,7 +48,7 @@ async function crearInventario(inventario) {
     } else {
       // Crear el nuevo inventario
       const response = await axios.post(
-        "http://localhost/ApiFarmacia/app/services/inventario.services.php",
+        "http://php1ruben.infinityfreeapp.com/app/inventario.services.php",
         inventario,
         {
           headers: {
@@ -68,7 +69,7 @@ async function crearInventario(inventario) {
 async function eliminarInventario(inventario) {
   try {
     const response = await axios.delete(
-      `http://localhost/ApiFarmacia/app/services/inventario.services.php?id=${inventario.id}`
+      `http://php1ruben.infinityfreeapp.com/app/inventario.services.php?id=${inventario.id}`
     );
     if (Array.isArray(response.data)) {
       return response.data;
@@ -82,7 +83,7 @@ async function eliminarInventario(inventario) {
 async function obtenerProductos() {
   try {
     const response = await axios.get(
-      "http://localhost/ApiFarmacia/app/services/producto.services.php"
+      "http://php1ruben.infinityfreeapp.com/app/producto.services.php"
     );
     if (Array.isArray(response.data)) {
       return response.data;
@@ -96,7 +97,7 @@ async function obtenerProductos() {
 async function obtenerProveedores() {
   try {
     const response = await axios.get(
-      "http://localhost/ApiFarmacia/app/services/proveedor.services.php"
+      "http://php1ruben.infinityfreeapp.com/app/proveedor.services.php"
     );
     if (Array.isArray(response.data)) {
       return response.data;
@@ -110,7 +111,7 @@ async function obtenerProveedores() {
 async function obtenerUsuarios() {
   try {
     const response = await axios.get(
-      "http://localhost/ApiFarmacia/app/services/usuario.services.php"
+      "http://php1ruben.infinityfreeapp.com/app/usuario.services.php"
     );
     if (Array.isArray(response.data)) {
       return response.data;
@@ -119,6 +120,35 @@ async function obtenerUsuarios() {
     console.error(error);
     return [];
   }
+}
+
+function generatePDF2() {
+  const codeSection = document.getElementById("listaInventario");
+  const doc = new jsPDF({
+    orientation: "p",
+    unit: "pt",
+    format: [1700, 2200], // establecer tamaño de la página aquí
+    compress: true,
+    lineHeight: 1.5,
+    fontSize: 10,
+    putOnlyUsedFonts: true,
+    floatPrecision: 2,
+  }); // configuración del documento PDF
+  doc.text("Este es un texto de ejemplo", 20, 20);
+  doc.html(codeSection, {
+    marginLeft:
+      doc.internal.pageSize.getWidth() / 2 - codeSection.offsetWidth / 2, // Centrar el contenido del div
+    callback: function (doc) {
+      // Obtener los datos del PDF como una cadena de datos
+      const pdfData = doc.output("datauristring");
+
+      // Abrir una nueva ventana del navegador con los datos del PDF
+      const newWindow = window.open();
+      newWindow.document.write(
+        '<iframe width="100%" height="100%" src="' + pdfData + '"></iframe>'
+      );
+    },
+  });
 }
 
 function Inventario() {
@@ -252,56 +282,63 @@ function Inventario() {
     }));
   }
 
+  function filtroNombre(idnombre) {
+    const nombre = productos.find((producto) => producto.id === idnombre);
+    return nombre;
+  }
+
   return (
     <div className="container">
-      <h1 className="title">Inventario</h1>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Producto</th>
-            <th>Clasificación</th>
-            <th>Cantidad</th>
-            <th>Fecha de vencimiento</th>
-            <th>Número de lote</th>
-            <th>Proveedor</th>
-            <th>Farmacéutica</th>
-            <th>Usuario</th>
-            <th>Fecha de ingreso</th>
-            <th>Número de factura</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {inventarios.map((inventario) => (
-            <tr key={inventario.id}>
-              <td>{inventario.producto_id}</td>
-              <td>{inventario.clasificacion_id}</td>
-              <td>{inventario.cantidad}</td>
-              <td>{inventario.fecha_vencimiento}</td>
-              <td>{inventario.numero_lote}</td>
-              <td>{inventario.proveedor_id}</td>
-              <td>{inventario.farmaceutica_id}</td>
-              <td>{inventario.usuario_id}</td>
-              <td>{inventario.fecha_ingreso}</td>
-              <td>{inventario.numero_factura}</td>
-              <td>
-                <Button
-                  variant="primary"
-                  onClick={() => handleEditClick(inventario)}
-                >
-                  Editar
-                </Button>{" "}
-                <Button
-                  variant="danger"
-                  onClick={() => handleDeleteClick(inventario)}
-                >
-                  Eliminar
-                </Button>
-              </td>
+      <div id="listaInventario">
+        <h1 className="title">Inventario</h1>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Clasificación</th>
+              <th>Cantidad</th>
+              <th>Fecha de vencimiento</th>
+              <th>Número de lote</th>
+              <th>Proveedor</th>
+              <th>Farmacéutica</th>
+              <th>Usuario</th>
+              <th>Fecha de ingreso</th>
+              <th>Número de factura</th>
+              <th>Acciones</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {inventarios.map((inventario) => (
+              <tr key={inventario.id}>
+                <td>{filtroNombre(inventario.id)}</td>
+                <td>{inventario.clasificacion_id}</td>
+                <td>{inventario.cantidad}</td>
+                <td>{inventario.fecha_vencimiento}</td>
+                <td>{inventario.numero_lote}</td>
+                <td>{inventario.proveedor_id}</td>
+                <td>{inventario.farmaceutica_id}</td>
+                <td>{inventario.usuario_id}</td>
+                <td>{inventario.fecha_ingreso}</td>
+                <td>{inventario.numero_factura}</td>
+                <td>
+                  <Button
+                    variant="primary"
+                    onClick={() => handleEditClick(inventario)}
+                  >
+                    Editar
+                  </Button>{" "}
+                  <Button
+                    variant="danger"
+                    onClick={() => handleDeleteClick(inventario)}
+                  >
+                    Eliminar
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <h2 className="subtitle">Crear o actualizar inventario</h2>
       <form className="form" onSubmit={handleFormSubmit}>
         <div className="form-group">
@@ -311,8 +348,8 @@ function Inventario() {
           <select
             className="input"
             name="producto_id"
-            value={inventario.producto_id}
             onChange={handleInputChange}
+            required
           >
             <option value="">Seleccionar producto</option>
             {productos.map((producto) => (
@@ -326,13 +363,28 @@ function Inventario() {
           <label className="label" htmlFor="formClasificacion">
             Clasificación:
           </label>
-          <input
+          <select
             className="input"
-            type="text"
-            name="clasificacion_id"
-            value={inventario.clasificacion_id}
+            id="clasificacion"
+            name="clasificacion"
+            defaultValue={inventario.clasificacion_id}
             onChange={handleInputChange}
-          />
+            required
+          >
+            <option value="">Selecciona una opción</option>
+            <option value="Analgésicos">Analgésicos</option>
+            <option value="Antiácidos y antiulcerosos">
+              Antiácidos y antiulcerosos
+            </option>
+            <option value="Antialérgicos">Antialérgicos</option>
+            <option value="Antidiarreicos">Antidiarreicos</option>
+            <option value="Laxantes">Laxantes</option>
+            <option value="Antiinflamatorios">Antiinflamatorios</option>
+            <option value="Antiinfecciosos">Antiinfecciosos</option>
+            <option value="Antipiréticos">Antipiréticos</option>
+            <option value="Mucolíticos">Mucolíticos</option>
+            <option value="Antitusivos">Antitusivos</option>
+          </select>
         </div>
         <div className="form-group">
           <label className="label" htmlFor="formCantidad">
@@ -341,10 +393,11 @@ function Inventario() {
           <input
             className="input"
             type="number"
-            name="cantidad1"
-            value={inventario.cantidad}
+            name="cantidad"
+            defaultValue={inventario.cantidad}
             onChange={handleInputChange}
             min="1"
+            required
           />
         </div>
         <div className="form-group">
@@ -355,8 +408,9 @@ function Inventario() {
             className="input"
             type="date"
             name="fecha_vencimiento"
-            value={inventario.fecha_vencimiento}
+            defaultValue={inventario.fecha_vencimiento}
             onChange={handleInputChange}
+            required
           />
         </div>
         <div className="form-group">
@@ -367,10 +421,11 @@ function Inventario() {
             className="input"
             type="number"
             name="numero_lote"
-            value={inventario.numero_lote}
+            defaultValue={inventario.numero_lote}
             onChange={handleInputChange}
             min="1"
             max="100000000"
+            required
           />
         </div>
         <div className="form-group">
@@ -380,8 +435,9 @@ function Inventario() {
           <select
             className="input"
             name="proveedor_id"
-            value={inventario.proveedor_id}
+            defaultValue={inventario.proveedor_id}
             onChange={handleInputChange}
+            required
           >
             <option value="">Seleccionar proveedor</option>
             {proveedores.map((proveedor) => (
@@ -399,8 +455,9 @@ function Inventario() {
             className="input"
             type="text"
             name="farmaceutica"
-            value={inventario.farmaceutica_id}
+            defaultValue={inventario.farmaceutica_id}
             onChange={handleInputChange}
+            required
           />
         </div>
         <div className="form-group">
@@ -412,6 +469,7 @@ function Inventario() {
             name="usuario_id"
             value={inventario.usuario_id}
             onChange={handleInputChange}
+            required
           >
             <option value="">Seleccionar usuario</option>
             {usuarios.map((usuario) => (
@@ -441,16 +499,20 @@ function Inventario() {
             className="input"
             type="number"
             name="numero_factura"
-            value={inventario.numero_factura}
+            defaultValue={inventario.numero_factura}
             onChange={handleInputChange}
             min="1"
             max="100000000"
+            required
           />
         </div>
         <button className="button" variant="primary" type="submit">
           {inventario.id ? "Actualizar" : "Crear"}
         </button>
       </form>
+      <Button variant="primary" onClick={generatePDF2}>
+        Generar PDF
+      </Button>
     </div>
   );
 }

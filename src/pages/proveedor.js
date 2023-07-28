@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import "../assets/css/style.css";
+import jsPDF from "jspdf";
 
 async function obtenerProveedores() {
   try {
     const response = await axios.get(
-      "http://localhost/ApiFarmacia/app/services/proveedor.services.php"
+      "http://php1ruben.infinityfreeapp.com/app/proveedor.services.php"
     );
     if (Array.isArray(response.data)) {
       return response.data;
@@ -20,7 +21,7 @@ async function obtenerProveedores() {
 async function actualizarProveedor(proveedor) {
   try {
     const response = await axios.put(
-      `http://localhost/ApiFarmacia/app/services/proveedor.services.php?id=${proveedor.id}`,
+      `http://php1ruben.infinityfreeapp.com/app/proveedor.services.php?id=${proveedor.id}`,
       proveedor,
       {
         headers: {
@@ -47,7 +48,7 @@ async function crearProveedor(proveedor) {
     } else {
       // Crear el nuevo proveedor
       const response = await axios.post(
-        "http://localhost/ApiFarmacia/app/services/proveedor.services.php",
+        "http://php1ruben.infinityfreeapp.com/app/proveedor.services.php",
         proveedor,
         {
           headers: {
@@ -68,7 +69,7 @@ async function crearProveedor(proveedor) {
 async function eliminarProveedor(proveedor) {
   try {
     const response = await axios.delete(
-      `http://localhost/ApiFarmacia/app/services/proveedor.services.php?id=${proveedor.id}`
+      `http://php1ruben.infinityfreeapp.com/app/proveedor.services.php?id=${proveedor.id}`
     );
     if (Array.isArray(response.data)) {
       return response.data;
@@ -77,6 +78,35 @@ async function eliminarProveedor(proveedor) {
     console.error(error);
     return [];
   }
+}
+
+function generatePDF2() {
+  const codeSection = document.getElementById("listaProveedores");
+  const doc = new jsPDF({
+    orientation: "p",
+    unit: "pt",
+    format: [1700, 2200], // establecer tamaño de la página aquí
+    compress: true,
+    lineHeight: 1.5,
+    fontSize: 10,
+    putOnlyUsedFonts: true,
+    floatPrecision: 2,
+  }); // configuración del documento PDF
+  doc.text("Este es un texto de ejemplo", 20, 20);
+  doc.html(codeSection, {
+    marginLeft:
+      doc.internal.pageSize.getWidth() / 2 - codeSection.offsetWidth / 2, // Centrar el contenido del div
+    callback: function (doc) {
+      // Obtener los datos del PDF como una cadena de datos
+      const pdfData = doc.output("datauristring");
+
+      // Abrir una nueva ventana del navegador con los datos del PDF
+      const newWindow = window.open();
+      newWindow.document.write(
+        '<iframe width="100%" height="100%" src="' + pdfData + '"></iframe>'
+      );
+    },
+  });
 }
 
 function Proveedor() {
@@ -142,36 +172,38 @@ function Proveedor() {
 
   return (
     <div className="container">
-      <h1 className="title">Lista de proveedores</h1>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {proveedores.map((proveedor) => (
-            <tr key={proveedor.id}>
-              <td>{proveedor.name}</td>
-              <td>
-                <Button
-                  variant="primary"
-                  onClick={() => handleEditClick(proveedor)}
-                >
-                  Editar
-                </Button>{" "}
-                <Button
-                  variant="danger"
-                  onClick={() => handleDeleteClick(proveedor)}
-                >
-                  Eliminar
-                </Button>
-              </td>
+      <div id="listaProveedores">
+        <h1 className="title">Lista de proveedores</h1>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Acciones</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {proveedores.map((proveedor) => (
+              <tr key={proveedor.id}>
+                <td>{proveedor.name}</td>
+                <td>
+                  <Button
+                    variant="primary"
+                    onClick={() => handleEditClick(proveedor)}
+                  >
+                    Editar
+                  </Button>{" "}
+                  <Button
+                    variant="danger"
+                    onClick={() => handleDeleteClick(proveedor)}
+                  >
+                    Eliminar
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <h2 className="subtitle">Crear o actualizar proveedor</h2>
       <form className="form" onSubmit={handleFormSubmit}>
         <div className="form-group">
@@ -190,6 +222,10 @@ function Proveedor() {
           {proveedor.id ? "Actualizar" : "Crear"}
         </button>
       </form>
+
+      <Button variant="primary" onClick={generatePDF2}>
+        Generar PDF
+      </Button>
     </div>
   );
 }
