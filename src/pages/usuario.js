@@ -130,7 +130,7 @@ function Usuario() {
     event.preventDefault();
     if (usuario.id) {
       // Actualizar el usuario existente
-      const data = await actualizarUsuario(usuario);
+      await actualizarUsuario(usuario);
       setUsuarios((prevUsuarios) =>
         prevUsuarios.map((prevUsuario) =>
           prevUsuario.id === usuario.id ? usuario : prevUsuario
@@ -144,7 +144,7 @@ function Usuario() {
       });
     } else {
       // Crear un nuevo usuario
-      const data = await crearUsuario(usuario);
+      await crearUsuario(usuario);
       setUsuarios((prevUsuarios) => [...prevUsuarios, usuario]);
       setUsuario({
         id: "",
@@ -156,7 +156,7 @@ function Usuario() {
   }
 
   async function handleDeleteClick(usuario) {
-    const data = await eliminarUsuario(usuario);
+    await eliminarUsuario(usuario);
     setUsuarios((prevUsuarios) =>
       prevUsuarios.filter((prevUsuario) => prevUsuario.id !== usuario.id)
     );

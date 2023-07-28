@@ -18,20 +18,6 @@ async function obtenerProductos() {
   }
 }
 
-async function actualizarProducto(producto) {
-  try {
-    const response = await api.put("producto.services.php", producto);
-    if (response.data.message === "Producto actualizado exitosamente.") {
-      return true;
-    } else {
-      throw new Error("No se pudo actualizar el producto.");
-    }
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-}
-
 async function crearProducto(name, img) {
   try {
     const producto = { name: name, img: img };
