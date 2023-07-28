@@ -128,7 +128,7 @@ function Proveedor() {
     event.preventDefault();
     if (proveedor.id) {
       // Actualizar el proveedor existente
-      const data = await actualizarProveedor(proveedor);
+      await actualizarProveedor(proveedor);
       setProveedores((prevProveedores) =>
         prevProveedores.map((prevProveedor) =>
           prevProveedor.id === proveedor.id ? proveedor : prevProveedor
@@ -140,7 +140,7 @@ function Proveedor() {
       });
     } else {
       // Crear un nuevo proveedor
-      const data = await crearProveedor(proveedor);
+      await crearProveedor(proveedor);
       setProveedores((prevProveedores) => [...prevProveedores, proveedor]);
       setProveedor({
         id: "",
@@ -150,7 +150,7 @@ function Proveedor() {
   }
 
   async function handleDeleteClick(proveedor) {
-    const data = await eliminarProveedor(proveedor);
+    await eliminarProveedor(proveedor);
     setProveedores((prevProveedores) =>
       prevProveedores.filter(
         (prevProveedor) => prevProveedor.id !== proveedor.id

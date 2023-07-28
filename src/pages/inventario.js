@@ -210,7 +210,7 @@ function Inventario() {
     event.preventDefault();
     if (inventario.id) {
       // Actualizar el inventario existente
-      const data = await actualizarInventario(inventario);
+      await actualizarInventario(inventario);
       setInventarios((prevInventarios) =>
         prevInventarios.map((prevInventario) =>
           prevInventario.id === inventario.id ? inventario : prevInventario
@@ -231,7 +231,7 @@ function Inventario() {
       });
     } else {
       // Crear un nuevo inventario
-      const data = await crearInventario(inventario);
+      await crearInventario(inventario);
       setInventarios((prevInventarios) => [...prevInventarios, inventario]);
       setInventario({
         id: "",
@@ -250,7 +250,7 @@ function Inventario() {
   }
 
   async function handleDeleteClick(inventario) {
-    const data = await eliminarInventario(inventario);
+    await eliminarInventario(inventario);
     setInventarios((prevInventarios) =>
       prevInventarios.filter(
         (prevInventario) => prevInventario.id !== inventario.id
